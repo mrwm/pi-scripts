@@ -11,7 +11,6 @@ date=$1
 c_message=$2
 pin1=$3
 pin2=$4
-dead="false"
 
 if [ -z $pin1 ]; then
   pin1=7
@@ -43,8 +42,9 @@ while true; do
   elif [ $mode2 -eq 0 ]; then
     gpio write $pin2 1
   fi
+
 done &
-############# ALARM ############
+######### ALARM + BUTTON #######
 if [ -z $@ ]; then
   printf "What time are you setting this alarm for? "
   read date
@@ -62,7 +62,15 @@ if [ -z $c_message ]; then
   #echo $delay
   sleep $delay
   echo "Wake up!"
-  while [ ! ${dead} ]; do
+  echo $dead
+  while true; do
+    mode1=$(gpio read $pin1)
+    if [ $mode1 -eq 1 ]; then
+      : # Do nothing
+    elif [ $mode1 -eq 0 ]; then
+      echo "PRESSED!"
+      exit
+    fi
     espeak "wake up" &>/dev/null
     espeak "Wake up" &>/dev/null
     espeak "Wake up" &>/dev/null
@@ -80,7 +88,15 @@ delay=$( echo $(( $(date --date="$date" +%s) - $(date +%s) )) )
 #echo $delay
 sleep $delay
 echo "Wake up!"
-while [ ! ${dead} ]; do
+echo $dead
+while true; do
+  mode1=$(gpio read $pin1)
+  if [ $mode1 -eq 1 ]; then
+    : # Do nothing
+  elif [ $mode1 -eq 0 ]; then
+    echo "PRESSED!"
+    exit
+  fi
   espeak $c_message &>/dev/null
 #  echo $c_message
   sleep 1
