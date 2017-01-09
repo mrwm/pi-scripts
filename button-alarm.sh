@@ -33,7 +33,7 @@ while true; do
     : # Do nothing
   elif [ $mode1 -eq 0 ]; then
     echo "PRESSED!"
-    dead=true
+    exit
   fi
 
   # Switch the LED on/off
