@@ -11,6 +11,7 @@ date=$1
 c_message=$2
 pin1=$3
 pin2=$4
+dead="false"
 
 if [ -z $pin1 ]; then
   pin1=7
@@ -33,7 +34,7 @@ while true; do
     : # Do nothing
   elif [ $mode1 -eq 0 ]; then
     echo "PRESSED!"
-    exit # Exit the whole script
+    dead=true
   fi
 
   # Switch the LED on/off
@@ -61,7 +62,7 @@ if [ -z $c_message ]; then
   #echo $delay
   sleep $delay
   echo "Wake up!"
-  while true; do
+  while [ ! ${dead} ]; do
     espeak "wake up" &>/dev/null
     espeak "Wake up" &>/dev/null
     espeak "Wake up" &>/dev/null
@@ -79,7 +80,7 @@ delay=$( echo $(( $(date --date="$date" +%s) - $(date +%s) )) )
 #echo $delay
 sleep $delay
 echo "Wake up!"
-while true; do
+while [ ! ${dead} ]; do
   espeak $c_message &>/dev/null
 #  echo $c_message
   sleep 1
