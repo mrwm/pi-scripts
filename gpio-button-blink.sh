@@ -16,6 +16,7 @@ pin1=$1
 pin2=$2
 if [ -z $1 ]; then
   pin1=7
+  pin2=1
 elif [ -z $2 ]; then
   pin2=1
 fi
@@ -38,9 +39,9 @@ while true; do
   fi
 
   # Switch the LED on/off
-  if [ $mode -eq 1 ]; then
-    gpio write $pin 0
-  elif [ $mode -eq 0 ]; then
-    gpio write $pin 1
+  if [ $mode2 -eq 1 ]; then
+    gpio write $pin2 0
+  elif [ $mode2 -eq 0 ]; then
+    gpio write $pin2 1
   fi
 done
